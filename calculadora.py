@@ -4,9 +4,18 @@ operadores = ["Soma", "Subtração", "Multiplicação", "Divisão"]
 
 
 def start_screen():
+    """Gera a tela inicial e pergunta qual operação o usuáro quer utilizar
+
+    Returns:
+        int: retorna a opção do operador
+    """
     print("Bem-vindo à Calculadora")
+
+    # Mostra os operadores na tela
     for i, operador in enumerate(operadores):
         print(f"{i+1}) {operador}")
+
+    # Pega o input do usuário e checa se é válido diante as opções
     while True:
         try:
             operador = int(input("Qual operação deseja realizar (1-4)? "))
@@ -19,6 +28,11 @@ def start_screen():
 
 
 def get_num1():
+    """Pega o input do primeiro número
+
+    Returns:
+        int: Primeiro número
+    """
     while True:
         try:
             num1 = float(input("Digite o primeiro número: "))
@@ -28,6 +42,11 @@ def get_num1():
 
 
 def get_num2():
+    """Pega o input do segundo número
+
+    Returns:
+        int: Segundo número
+    """
     while True:
         try:
             num2 = float(input("Digite o segundo número: "))
@@ -53,6 +72,11 @@ def dividir(num1, num2):
 
 
 def escolha():
+    """Pergunta se o usuário quer continuar no programa e retorna True/False
+
+    Returns:
+        bool: True se o usuário quer continuar e False se não quer.
+    """
     while True:
         escolha = input("Deseja realizar outra operação? (s/n) ")
         if "S" in escolha[0].upper():
@@ -64,6 +88,7 @@ def escolha():
 
 
 def main():
+    # Loop Principal
     while True:
         operador = start_screen()
         system("cls")
@@ -90,6 +115,7 @@ def main():
                 continue
             resultado = dividir(num1, num2)
 
+        # Se o resultado não for None, mostra o resultado.
         if resultado is not None:
             print(
                 f"\nA {operadores[operador-1]} de {num1:.0f} e {num2:.0f}"
