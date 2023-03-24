@@ -18,8 +18,7 @@ Calculadora simples, interface feita com **Tkinter**, possui os 4 operadores bá
 - Adicionei um novo valor no dicionário de valores chamado "repeat" que tem valor de True ou False, se alguma conta já foi feita o valor muda para True. E caso o usuário digitar algum valor ou mudar o operador o valor muda para False novamente.
 
 **Dicionário:**
-`values = {"num1": "0", "num2": "0", "operator": None, "repeat": False}
-`
+`values = {"num1": "0", "num2": "0", "operator": None, "repeat": False}`
 
 #### 2 - Continuar a operação quando não informar nenhum valor novo
 
