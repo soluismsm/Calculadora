@@ -1,133 +1,134 @@
-from os import system
+import tkinter as tk
+from tkinter import ttk
 
-operadores = ["Soma", "Subtração", "Multiplicação", "Divisão"]
-
-
-def start_screen():
-    """Gera a tela inicial e pergunta qual operação o usuáro quer utilizar
-
-    Returns:
-        int: retorna a opção do operador
-    """
-    print("Bem-vindo à Calculadora")
-
-    # Mostra os operadores na tela
-    for i, operador in enumerate(operadores):
-        print(f"{i+1}) {operador}")
-
-    # Pega o input do usuário e checa se é válido diante as opções
-    while True:
-        try:
-            operador = int(input("Qual operação deseja realizar (1-4)? "))
-            if 1 <= operador <= 4:
-                return operador
-            continue
-        except ValueError:
-            print("ERRO. Digite um número válido (1-4)\n")
-            continue
+values = {"num1": "0", "num2": "0", "operator": None, "repeat": False}
 
 
-def get_num1():
-    """Pega o input do primeiro número
-
-    Returns:
-        int: Primeiro número
-    """
-    while True:
-        try:
-            num1 = float(input("Digite o primeiro número: "))
-            return num1
-        except ValueError:
-            print("ERRO. Digite um número válido")
-
-
-def get_num2():
-    """Pega o input do segundo número
-
-    Returns:
-        int: Segundo número
-    """
-    while True:
-        try:
-            num2 = float(input("Digite o segundo número: "))
-            return num2
-        except ValueError:
-            print("ERRO. Digite um número válido")
-
-
-def somar(num1, num2):
-    return num1 + num2
-
-
-def subtrair(num1, num2):
-    return num1 - num2
-
-
-def multiplicar(num1, num2):
-    return num1 * num2
-
-
-def dividir(num1, num2):
-    return num1 / num2
-
-
-def escolha():
-    """Pergunta se o usuário quer continuar no programa e retorna True/False
-
-    Returns:
-        bool: True se o usuário quer continuar e False se não quer.
-    """
-    while True:
-        escolha = input("Deseja realizar outra operação? (s/n) ")
-        if "S" in escolha[0].upper():
-            return True
-        elif "N" in escolha[0].upper():
-            return False
+def calculate():
+    num1 = float(values["num1"])
+    num2 = float(values["num2"])
+    operator = values["operator"]
+    if operator is not None:
+        if "/" in operator:
+            result = num1 / num2
+        elif "x" in operator:
+            result = num1 * num2
+        elif "-" in operator:
+            result = num1 - num2
         else:
-            print("Digite uma resposta válida (s/n).")
+            result = num1 + num2
+    else:
+        result = num1
+
+    if result.is_integer():
+        result = int(result)
+
+    values["num1"] = result
+    values["repeat"] = True
+
+    output_text.configure(text=result)
 
 
-def main():
-    # Loop Principal
-    while True:
-        operador = start_screen()
-        system("cls")
-        print(f"-=-=-=-{operadores[operador - 1]}-=-=-=-")
-        num1 = get_num1()
-        num2 = get_num2()
-        resultado = None
+def get_num(number):
+    if values["repeat"]:
+        clear_output()
 
-        # Soma
-        if operador == 1:
-            resultado = somar(num1, num2)
-        # Subtração
-        if operador == 2:
-            resultado = subtrair(num1, num2)
+    if values["operator"] is None:
+        num = values["num1"]
 
-        # Multiplicação
-        if operador == 3:
-            resultado = multiplicar(num1, num2)
-
-        # Divisão
-        if operador == 4:
-            if num2 == 0:
-                print("Não é possível dividir por zero.")
-                continue
-            resultado = dividir(num1, num2)
-
-        # Se o resultado não for None, mostra o resultado.
-        if resultado is not None:
-            print(
-                f"\nA {operadores[operador-1]} de {num1:.0f} e {num2:.0f}"
-                f"é {resultado:.0f}"
-            )
-
-        continuar = escolha()
-        if continuar:
-            system("cls")
+        if values["num1"] == "0":
+            num = number
+            values["num1"] = num
         else:
-            print("Volte sempre!")
-            break
+            num += number
+            values["num1"] = num
+    else:
+        num = values["num2"]
+
+        if values["num2"] == "0":
+            num = number
+            values["num2"] = num
+        else:
+            num += number
+            values["num2"] = num
+
+    values["repeat"] = False
+    output_text.configure(text=num)
 
 
-main()
+def get_operator(operator):
+    repeat = values["repeat"]
+    if repeat:
+        values["num2"] = "0"
+        values["repeat"] = False
+    values["operator"] = operator
+
+
+def clear_output():
+    values["num1"] = "0"
+    values["num2"] = "0"
+    values["operator"] = None
+    values["repeat"] = False
+    output_text.configure(text="0")
+
+
+root = tk.Tk()
+root.title("Calculator")
+root.resizable(False, False)
+
+frame = tk.Frame(root)
+frame.pack()
+
+style = ttk.Style()
+style.configure("TButton", font=("TkDefaultFont", 15))
+style.configure("TLabel", font=("TkDefaultFont", 15))
+
+
+output_text = ttk.Label(frame, text="0")
+output_text.grid(row=0, columnspan=4, sticky="E")
+
+# First Row
+number7 = ttk.Button(frame, text="7", command=lambda: get_num("7"))
+number7.grid(row=3, column=0, ipady=10)
+number8 = ttk.Button(frame, text="8", command=lambda: get_num("8"))
+number8.grid(row=3, column=1, ipady=10)
+number9 = ttk.Button(frame, text="9", command=lambda: get_num("9"))
+number9.grid(row=3, column=2, ipady=10)
+division = ttk.Button(frame, text="÷", command=lambda: get_operator("/"))
+division.grid(row=3, column=3, ipady=10)
+
+# Second Row
+number4 = ttk.Button(frame, text="4", command=lambda: get_num("4"))
+number4.grid(row=4, column=0, ipady=10)
+number5 = ttk.Button(frame, text="5", command=lambda: get_num("5"))
+number5.grid(row=4, column=1, ipady=10)
+number6 = ttk.Button(frame, text="6", command=lambda: get_num("6"))
+number6.grid(row=4, column=2, ipady=10)
+multiplication = ttk.Button(frame, text="x", command=lambda: get_operator("x"))
+multiplication.grid(row=4, column=3, ipady=10)
+
+# Third Row
+number1 = ttk.Button(frame, text="1", command=lambda: get_num("1"))
+number1.grid(row=5, column=0, ipady=10)
+number2 = ttk.Button(frame, text="2", command=lambda: get_num("2"))
+number2.grid(row=5, column=1, ipady=10)
+number3 = ttk.Button(frame, text="3", command=lambda: get_num("3"))
+number3.grid(row=5, column=2, ipady=10)
+subtraction = ttk.Button(frame, text="-", command=lambda: get_operator("-"))
+subtraction.grid(row=5, column=3, ipady=10)
+
+# Fourth Row
+number0 = ttk.Button(frame, text="0", command=lambda: get_num("0"))
+number0.grid(row=6, column=0, ipady=10)
+dot = ttk.Button(frame, text=",", command=lambda: get_num("."))
+dot.grid(row=6, column=1, ipady=10)
+clear = ttk.Button(frame, text="C", command=clear_output)
+clear.grid(row=6, column=2, ipady=10)
+addition = ttk.Button(frame, text="+", command=lambda: get_operator("+"))
+addition.grid(row=6, column=3, ipady=10)
+
+equal_button = ttk.Button(frame, text="=", command=calculate)
+equal_button.grid(row=7, columnspan=4, rowspan=2, sticky="WSNE")
+
+
+root.mainloop()
