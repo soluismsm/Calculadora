@@ -48,9 +48,9 @@ Verifiquei se o **operator is None**, caso seja faça as operações com os valo
 
 Lista de Afazeres por ordem de prioridade:
 
-1 - Botão para deletar último número.
-2 - Mais operadores de porcentagem, potenciação, raiz quadrada.
-3 - Adicionar parenteses para operações mais complexas.
-4 - Valores na memória.
-5 - Interface Gráfica
-6 - ....
+1. Botão para deletar último número.
+2. Mais operadores de porcentagem, potenciação, raiz quadrada.
+3. Adicionar parenteses para operações mais complexas.
+4. Valores na memória.
+5. Interface Gráfica
+6. ....
